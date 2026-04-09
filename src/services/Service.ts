@@ -2,26 +2,32 @@ import axios from "axios";
 
 // Cria uma nova instância do Axios
 const api = axios.create({
-  baseURL: 'https://lojagames-nest.onrender.com'
-})
+        baseURL: "https://lojagames-nest.onrender.com"
+    })
 
 
-export const buscarCategoria = async (url: string, header: Object) => { 
-    const resposta = await api.get(url, header)
-    return resposta.data
+
+// Função para Consultar 
+export const buscar = async (url:string, setDados: Function ) => {
+    const resposta = await api.get(url)
+    setDados(resposta.data);
+    
 }
 
-export const cadastrarCategoria = async (url: string, dados: Object, setDados: Function, header: Object) => {
-    const resposta = await api.post(url, dados, header)
-    setDados(resposta.data)
+// Função para Cadastrar 
+export const cadastrar = async (url:string, dados: Object, setDados: Function) => {
+    const resposta = await api.post(url, dados)
+    setDados(resposta.data);
 }
 
-export const atualizarCategoria = async (url: string, dados: Object, setDados: Function, header: Object) => {
-    const resposta = await api.put(url, dados, header)
-    setDados(resposta.data)
+// Função para Atualizar 
+export const atualizar = async (url:string, dados: Object, setDados: Function) => {
+    const resposta = await api.put(url, dados)
+    setDados(resposta.data);
 }
 
-
-export const deletarCategoria = async (url: string, header: Object) => {
-    await api.delete(url, header)
+// Função para Deletar 
+export const deletar = async (url:string) => {
+await api.delete(url)
+    
 }
