@@ -1,11 +1,10 @@
-import {useEffect, useState, type ChangeEvent, type SyntheticEvent} from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { PacmanLoader } from "react-spinners";
 import type Categoria from "../../../models/Categoria";
-import { buscar, atualizar, cadastrar } from "../../../services/Service";
+import { buscar, deletar } from "../../../services/Service";
 
-function FormCategoria() {
-  // Objeto responsável por redirecionar o usuario para uma outra rota
+function DeletarCategoria() {
   const navigate = useNavigate();
 
   // Estado para controlar o Loader(animação de carregamento)
@@ -14,15 +13,18 @@ function FormCategoria() {
   // Estado que irá receber todos os categorias persistidos no Backend
   const [categoria, setCategoria] = useState<Categoria>({} as Categoria);
 
+
   const { id } = useParams<{ id: string }>();
 
   async function buscarCategoriaPorId(id: string) {
     try {
-      await buscar(`categorias/${id}`, setCategoria);
+      await buscar(`categorias/${id}`, setCategoria)
     } catch (error: any) {
-      alert("erro ao buscar categoria");
+      alert("Erro ao deletar Categoria") 
     }
   }
+
+
 
   useEffect(() => {
     if (id !== undefined) {
@@ -30,74 +32,55 @@ function FormCategoria() {
     }
   }, [id]);
 
-  // Função de atuaiização do estado categoria
-  function atualizarEstado(e: ChangeEvent<HTMLInputElement>) {
-    setCategoria({
-      ...categoria,
-      [e.target.name]: e.target.value,
-    });
-  }
-
   function retornar() {
     navigate("/categorias");
   }
 
-  async function gerarNovaCategoria(e: SyntheticEvent<HTMLFormElement>) {
-    e.preventDefault();
+  async function deletarCategoria(id: string) {
     setIsLoading(true);
-
-    if (id !== undefined) {
-      try {
-        await atualizar("/categorias", categoria, setCategoria);
-        alert("O categoria foi atualizado com sucesso!");
-      } catch (error: any) {
-        alert(" Erro ao cadastrar o categoria.");
-      }
-    }
-
     try {
-      await cadastrar("/categorias", categoria, setCategoria);
-      alert("O categoria foi cadastrado com sucesso!");
+      await deletar(`categorias/${id}`)
+      alert("Categoria deletado com sucesso!");
     } catch (error: any) {
-      alert(" Erro ao cadastrar o categoria.");
+      alert("Erro ao deletar Categoria") 
     }
-
     setIsLoading(false);
     retornar();
   }
 
   return (
-    <div className="container flex flex-col items-center justify-center mx-auto">
-      <h1 className="text-4xl text-center my-8">
-        {id === undefined ? "Cadastrar" : "Editar"} Categoria
-      </h1>
-
-      <form className="w-1/2 flex flex-col gap-4" onSubmit={gerarNovaCategoria}>
-        <div className="flex flex-col gap-2">
-          <label htmlFor="descricao">Descrição do Categoria</label>
-          <input
-            type="text"
-            placeholder="Descreva aqui seu categoria"
-            name="descricao"
-            className="border-2 border-slate-700 rounded p-2"
-            value={categoria.tipo}
-            onChange={(e: ChangeEvent<HTMLInputElement>) => atualizarEstado(e)}
-          />
+    <div className="container w-1/3 mx-auto">
+      <h1 className="text-4xl text-center my-4">Deletar categoria</h1>
+      <p className="text-center font-semibold mb-4">
+        Você tem certeza de que deseja apagar o categoria a seguir?
+      </p>
+      <div className="border flex flex-col rounded-2xl overflow-hidden justify-between">
+        <header className="py-2 px-6 bg-indigo-600 text-white font-bold text-2xl">
+          Categoria
+        </header>
+        <p className="p-8 text-3xl bg-slate-200 h-full">{categoria.tipo}</p>
+        <div className="flex">
+          <button
+            className="text-slate-100 bg-red-400 hover:bg-red-600 w-full py-2"
+            onClick={retornar}
+          >
+            Não
+          </button>
+          <button
+            className="w-full text-slate-100 bg-indigo-400 
+                        hover:bg-indigo-600 flex items-center justify-center"
+            onClick={() => deletarCategoria(String(categoria.id))}
+          >
+            {isLoading ? (
+              <PacmanLoader color="#ffffff" size={24} />
+            ) : (
+              <span>Sim</span>
+            )}
+          </button>
         </div>
-        <button
-          className="rounded text-slate-100 bg-indigo-400 
-                    hover:bg-indigo-800 w-1/2 py-2 mx-auto flex justify-center"
-          type="submit"
-        >
-          {isLoading ? (
-            <PacmanLoader color="#ffffff" size={24} />
-          ) : (
-            <span>{id === undefined ? "Cadastrar" : "Atualizar"}</span>
-          )}
-        </button>
-      </form>
+      </div>
     </div>
   );
 }
 
-export default FormCategoria;
+export default DeletarCategoria;

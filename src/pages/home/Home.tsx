@@ -36,7 +36,7 @@ function home() {
           <img
             src="https://ik.imagekit.io/o02kjfcyy/assets%20-%20loja%20de%20games/img-loja-games.png"
             alt="Imagem Página Home"
-            className="w-2/3"
+            className="w-2/3 drop-shadow-[0_25px_30px_rgba(0,0,0,0.6)] hover:-translate-y-1.25 transition duration-300"
           />
         </figure>
       </article>

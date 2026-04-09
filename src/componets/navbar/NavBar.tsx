@@ -42,7 +42,7 @@ function Navbar() {
       <nav className="flex items-center gap-4 text-sm ">
         <Link to="#">Produtos</Link>
         <Link to="/categorias">Categorias</Link>
-        <Link to="#">Cadastrar Categoria</Link>
+        <Link to="/cadastrarcategoria">Cadastrar Categoria</Link>
       </nav>
 
       <div className="h-6 w-px bg-white/20"></div>

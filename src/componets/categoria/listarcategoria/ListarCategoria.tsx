@@ -16,10 +16,6 @@ function ListarCategorias() {
   // Estado que irá receber todos os Categorias persistidos no Backend
   const [Categorias, setCategorias] = useState<Categoria[]>([]);
 
-
-
- 
-
   // Cria um useEffect para inicializar a função buscarCategorias
   useEffect(() => {
     buscarCategorias();
